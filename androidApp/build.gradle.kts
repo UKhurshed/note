@@ -14,6 +14,7 @@ kotlin {
 }
 dependencies {
     implementation(libs.androidx.material3)
+    implementation(libs.compose.material.icons.core)
     implementation(projects.shared)
 
     implementation(libs.androidx.activity.compose)
