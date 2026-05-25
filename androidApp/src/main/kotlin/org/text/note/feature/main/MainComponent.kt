@@ -1,6 +1,7 @@
 package org.text.note.feature.main
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import org.text.note.core.BaseStoreComponent
 
@@ -14,10 +15,11 @@ class MainComponent(
     store = componentContext.instanceKeeper.getStore { storeFactory.create() }
 ) {
     init {
-        accept(MainStore.Intent.Load)
+        lifecycle.doOnResume {
+            accept(MainStore.Intent.Load)
+        }
     }
     fun onAddClicked() = onAddNote()
     fun onNoteClicked(id: String) = onOpenNote(id)
     fun onDeleteClicked(id: String) = accept(MainStore.Intent.Delete(id))
-    fun reload() = accept(MainStore.Intent.Load)
 }

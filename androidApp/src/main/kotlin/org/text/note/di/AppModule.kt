@@ -13,4 +13,5 @@ val appModule = module {
     single<StoreFactory> { DefaultStoreFactory() }
     factory { org.text.note.feature.main.MainStoreFactory(get(), get()) }
     factory { org.text.note.feature.edit.NoteEditStoreFactory(get(), get()) }
+    factory { org.text.note.feature.detail.NoteDetailStoreFactory(get(), get()) }
 }
