@@ -11,11 +11,13 @@ import org.text.note.feature.detail.NoteDetailComponent
 import org.text.note.feature.edit.NoteEditComponent
 import org.text.note.feature.main.MainComponent
 import kotlinx.serialization.Serializable
+import org.text.note.feature.edit.NoteEditStoreFactory
 import org.text.note.feature.main.MainStoreFactory
 
 class RootComponent(
     componentContext: ComponentContext,
-    private val mainStoreFactory: MainStoreFactory
+    private val mainStoreFactory: MainStoreFactory,
+    private var editStoreFactory: NoteEditStoreFactory,
 ) : ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
 
@@ -37,6 +39,7 @@ class RootComponent(
                     onOpenNote = { id -> navigation.pushNew(Config.Detail(id)) }
                 )
             )
+
             is Config.Detail -> Child.Detail(
                 NoteDetailComponent(
                     componentContext = ctx,
@@ -45,9 +48,11 @@ class RootComponent(
                     onBackPressed = { navigation.pop() }
                 )
             )
+
             is Config.Edit -> Child.Edit(
                 NoteEditComponent(
                     componentContext = ctx,
+                    storeFactory = editStoreFactory,
                     noteId = config.noteId,
                     onDone = { navigation.pop() }
                 )
@@ -56,9 +61,12 @@ class RootComponent(
 
     @Serializable
     sealed interface Config {
-        @Serializable data object Main : Config
-        @Serializable data class Detail(val noteId: String) : Config
-        @Serializable data class Edit(val noteId: String?) : Config
+        @Serializable
+        data object Main : Config
+        @Serializable
+        data class Detail(val noteId: String) : Config
+        @Serializable
+        data class Edit(val noteId: String?) : Config
     }
 
     sealed interface Child {
