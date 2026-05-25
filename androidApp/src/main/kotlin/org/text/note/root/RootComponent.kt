@@ -11,9 +11,11 @@ import org.text.note.feature.detail.NoteDetailComponent
 import org.text.note.feature.edit.NoteEditComponent
 import org.text.note.feature.main.MainComponent
 import kotlinx.serialization.Serializable
+import org.text.note.feature.main.MainStoreFactory
 
 class RootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val mainStoreFactory: MainStoreFactory
 ) : ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
 
@@ -30,6 +32,7 @@ class RootComponent(
             is Config.Main -> Child.Main(
                 MainComponent(
                     componentContext = ctx,
+                    storeFactory = mainStoreFactory,
                     onAddNote = { navigation.pushNew(Config.Edit(noteId = null)) },
                     onOpenNote = { id -> navigation.pushNew(Config.Detail(id)) }
                 )
